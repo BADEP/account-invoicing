@@ -11,22 +11,15 @@ from odoo.tools import float_is_zero
 class AccountMove(models.Model):
     _inherit = "account.move"
 
-    manual_currency = fields.Boolean(
-        readonly=True,
-        states={"draft": [("readonly", False)]},
-    )
+    manual_currency = fields.Boolean()
     is_manual = fields.Boolean(compute="_compute_currency")
     type_currency = fields.Selection(
         selection=lambda self: self._get_label_currency_name(),
         default=lambda self: self._get_label_currency_name()[0][0],
-        readonly=True,
-        states={"draft": [("readonly", False)]},
     )
     manual_currency_rate = fields.Float(
         digits="Manual Currency",
         tracking=True,
-        readonly=True,
-        states={"draft": [("readonly", False)]},
         help="Set new currency rate to apply on the invoice\n."
         "This rate will be taken in order to convert amounts between the "
         "currency on the purchase order and last currency",
@@ -98,7 +91,6 @@ class AccountMove(models.Model):
         if self.type_currency == "inverse_company_rate":
             amount_currency = 1.0 / amount_currency
         self.manual_currency_rate = amount_currency
-        self.line_ids._onchange_amount_currency()
 
     @api.depends("currency_id")
     def _compute_currency(self):
@@ -113,13 +105,9 @@ class AccountMove(models.Model):
         return True
 
     @api.model
-    def _fields_view_get(
-        self, view_id=None, view_type="form", toolbar=False, submenu=False
-    ):
+    def get_view(self, view_id=None, view_type="form", **options):
         """Change string name to company currency"""
-        result = super()._fields_view_get(
-            view_id=view_id, view_type=view_type, toolbar=toolbar, submenu=submenu
-        )
+        result = super().get_view(view_id=view_id, view_type=view_type, **options)
         if view_type == "form":
             company_currency_name = (
                 self.env["res.company"].browse(self._context.get("company_id"))
@@ -145,6 +133,7 @@ class AccountMove(models.Model):
                     if move.type_currency == "inverse_company_rate"
                     else (1.0 / last_rate[self.company_id])
                 )
+
     def _check_manual_currency_rate(self):
         for rec in self:
             if not rec.manual_currency:
@@ -156,50 +145,23 @@ class AccountMove(models.Model):
         self._check_manual_currency_rate()
         return super()._post(soft=soft)
 
+
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
 
-    @api.onchange("amount_currency")
-    def _onchange_amount_currency(self):
+    @api.depends(
+        "currency_id", "company_id", "move_id.date", "move_id.manual_currency_rate"
+    )
+    def _compute_currency_rate(self):
+        res = super()._compute_currency_rate()
         for line in self:
-            if line.move_id.manual_currency:
-                rate = (
-                    line.move_id.manual_currency_rate
-                    if line.move_id.type_currency == "inverse_company_rate"
-                    else (1.0 / line.move_id.manual_currency_rate)
-                )
-                balance = line.amount_currency * rate
-                line.debit = balance if balance > 0.0 else 0.0
-                line.credit = -balance if balance < 0.0 else 0.0
-
-                if not line.move_id.is_invoice(include_receipts=True):
-                    continue
-
-                line.update(line._get_fields_onchange_balance())
-                line.update(line._get_price_total_and_subtotal())
-            else:
-                super(AccountMoveLine, line)._onchange_amount_currency()
-        return
-
-    @api.model
-    def _get_fields_onchange_subtotal_model(
-        self, price_subtotal, move_type, currency, company, date
-    ):
-        if self.move_id.manual_currency:
-            sign = -1 if move_type in self.move_id.get_inbound_types() else 1
-            amount_currency = price_subtotal * sign
+            if not line.move_id.manual_currency:
+                continue
+            # Currency Rate on move line use 'company_rate'
             rate = (
-                self.move_id.manual_currency_rate
-                if self.move_id.type_currency == "inverse_company_rate"
-                else (1.0 / self.move_id.manual_currency_rate)
+                line.move_id._origin.manual_currency_rate
+                if line.move_id.type_currency == "company_rate"
+                else (1.0 / line.move_id._origin.manual_currency_rate)
             )
-            balance = price_subtotal * rate
-            return {
-                "amount_currency": amount_currency,
-                "currency_id": currency.id,
-                "debit": balance > 0.0 and balance or 0.0,
-                "credit": balance < 0.0 and -balance or 0.0,
-            }
-        return super()._get_fields_onchange_subtotal_model(
-            price_subtotal, move_type, currency, company, date
-        )
+            line.currency_rate = rate
+        return res
