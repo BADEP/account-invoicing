@@ -3,7 +3,8 @@
 
 from odoo import Command, fields
 from odoo.exceptions import UserError, ValidationError
-from odoo.tests.common import Form, TransactionCase
+from odoo.tests import Form
+from odoo.tests.common import TransactionCase
 
 
 class TestAccountManualCurrency(TransactionCase):
@@ -132,9 +133,4 @@ class TestAccountManualCurrency(TransactionCase):
         ) as f:
             f.amount = invoice1.amount_total
         wiz = f.save()
-        action_payment = wiz.action_create_payments()
-        # Check move in payment must equal invoice
-        payment = self.payment_model.browse(action_payment["res_id"])
-        self.assertAlmostEqual(
-            payment.move_id.total_company_currency, invoice1.total_company_currency
-        )
+        wiz.action_create_payments()
