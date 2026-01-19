@@ -4,7 +4,7 @@
 
 {
     "name": "Account Move Sub State",
-    "version": "18.0.1.0.1",
+    "version": "19.0.1.0.0",
     "category": "Accounting & Finance",
     "author": "360ERP, Ecosoft, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/account-invoicing",
@@ -15,6 +15,7 @@
         "data/account_move_substate_data.xml",
         "views/account_move_views.xml",
     ],
+    "maintainers": ["ps-tubtim"],
     "demo": ["demo/account_move_substate_demo.xml"],
     "installable": True,
 }
