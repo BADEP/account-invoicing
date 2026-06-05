@@ -2,13 +2,14 @@
 # License AGPL-3 - See http://www.gnu.org/licenses/agpl-3.0.html
 
 from odoo.tests import tagged
-from odoo.tests.common import TransactionCase
+
+from odoo.addons.base.tests.common import BaseCommon
 
 from .. import uninstall_hook
 
 
 @tagged("post_install", "-at_install")
-class TestUninstallHook(TransactionCase):
+class TestUninstallHook(BaseCommon):
     def test_uninstall_hook(self):
         self.env.ref("account.action_move_in_invoice").unlink()
 
