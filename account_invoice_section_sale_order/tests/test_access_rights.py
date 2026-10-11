@@ -21,25 +21,19 @@ class TestAccessRights(Common):
             {"name": "Create Only Group"}
         )
         cls.sale_manager_group = cls.env.ref("sales_team.group_sale_manager")
-        cls.env["ir.model.access"].create(
+        cls.env["ir.access"].create(
             [
                 {
                     "name": "invoice_create_only",
                     "model_id": cls.env.ref("account.model_account_move").id,
                     "group_id": cls.create_only_group.id,
-                    "perm_read": 0,
-                    "perm_write": 0,
-                    "perm_create": 1,
-                    "perm_unlink": 0,
+                    "operation": "c",
                 },
                 {
                     "name": "invoice_line_create_only",
                     "model_id": cls.env.ref("account.model_account_move_line").id,
                     "group_id": cls.create_only_group.id,
-                    "perm_read": 0,
-                    "perm_write": 0,
-                    "perm_create": 1,
-                    "perm_unlink": 0,
+                    "operation": "c",
                 },
             ]
         )

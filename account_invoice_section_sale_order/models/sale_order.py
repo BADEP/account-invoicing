@@ -10,14 +10,14 @@ from odoo.tools.safe_eval import safe_eval, time
 class SaleOrder(models.Model):
     _inherit = "sale.order"
 
-    def _create_invoices(self, grouped=False, final=False, date=None):
+    def _create_invoices(self, *args, **kwargs):
         """Add sections by groups in the invoice line.
 
         Order the invoicing lines by groups and add lines section with
         the group name.
         Only do this for invoices targetting multiple groups
         """
-        invoices = super()._create_invoices(grouped=grouped, final=final, date=date)
+        invoices = super()._create_invoices(*args, **kwargs)
         for invoice in invoices.sudo():
             if invoice.line_ids and (
                 len(invoice.line_ids.mapped(invoice.line_ids._get_section_grouping()))

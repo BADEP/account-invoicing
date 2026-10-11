@@ -18,7 +18,7 @@ class TestInvoiceGroupBySaleOrder(Common):
         """Check invoice is generated  with sale order sections."""
         result = {
             10: (
-                "".join([self.order1_p1.name, " - ", self.order1_p1.client_order_ref]),
+                f"{self.order1_p1.name} - {self.order1_p1.client_order_ref}",
                 "line_section",
             ),
             20: (f"{self.product_1.name}\norder 1 line 1", "product"),
@@ -32,7 +32,7 @@ class TestInvoiceGroupBySaleOrder(Common):
         for line in lines:
             if line.sequence not in result:
                 continue
-            self.assertEqual(line.name, result[line.sequence][0])
+            self.assertEqual(line.label, result[line.sequence][0])
             self.assertEqual(line.display_type, result[line.sequence][1])
 
     def test_create_invoice_with_currency(self):
@@ -121,5 +121,5 @@ class TestInvoiceGroupBySaleOrder(Common):
             for line in invoice.invoice_line_ids.sorted("sequence"):
                 if line.sequence not in result:
                     continue
-                self.assertEqual(line.name, result[line.sequence][0])
+                self.assertEqual(line.label, result[line.sequence][0])
                 self.assertEqual(line.display_type, result[line.sequence][1])
