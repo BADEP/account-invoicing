@@ -14,6 +14,8 @@ from .common import InvoiceModeAtShippingCommon
 
 
 class TestInvoiceModeAtShipping(InvoiceModeAtShippingCommon):
+    _test_user_groups = None
+
     def test_invoice_created_at_shipping(self):
         """Check that an invoice is created when goods are shipped."""
         self.partner.invoicing_mode = "at_shipping"
@@ -44,7 +46,7 @@ class TestInvoiceModeAtShipping(InvoiceModeAtShippingCommon):
             trap.assert_jobs_count(1)
             trap.assert_enqueued_job(
                 picking._invoicing_at_shipping,
-                properties=dict(eta=timedelta(days=2)),
+                properties={"eta": timedelta(days=2)},
             )
             self.assertFalse(self.so1.invoice_ids)
 

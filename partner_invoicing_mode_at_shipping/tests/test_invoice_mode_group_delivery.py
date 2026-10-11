@@ -9,6 +9,8 @@ from .common import InvoiceModeAtShippingCommon
 
 
 class TestInvoiceModeAtShippingGrouped(InvoiceModeAtShippingCommon):
+    _test_user_groups = None
+
     def test_invoice_created_at_shipping_per_delivery(self):
         """Check that an invoice is created when goods are shipped."""
         self.partner.invoicing_mode = "standard"
