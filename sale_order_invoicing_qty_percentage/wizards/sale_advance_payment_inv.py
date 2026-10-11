@@ -18,7 +18,8 @@ class SaleAdvancePaymentInv(models.TransientModel):
         """Inject context key for later use that information to modify quantities
         and switch the invoiced method back to regular one for using the normal flow.
         """
-        if self.advance_payment_method == "qty_percentage":
-            self = self.with_context(qty_percentage=self.qty_percentage)
-            self.advance_payment_method = "delivered"
-        return super().create_invoices()
+        wizard = self
+        if wizard.advance_payment_method == "qty_percentage":
+            wizard = wizard.with_context(qty_percentage=wizard.qty_percentage)
+            wizard.advance_payment_method = "delivered"
+        return super(SaleAdvancePaymentInv, wizard).create_invoices()
