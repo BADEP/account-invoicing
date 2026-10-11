@@ -60,10 +60,7 @@ class TripleDiscountMixin(models.AbstractModel):
         discount_values = []
         for discount in discounts:
             discount_values.append(1 - (discount or 0.0) / 100.0)
-        aggregated_discount = (
-            1 - functools.reduce((lambda x, y: x * y), discount_values)
-        ) * 100
-        return aggregated_discount
+        return (1 - functools.reduce((lambda x, y: x * y), discount_values)) * 100
 
     @api.model
     def _get_multiple_discount_field_names(self):
@@ -82,5 +79,5 @@ class TripleDiscountMixin(models.AbstractModel):
         discount_fields = self._get_multiple_discount_field_names()
         if "discount" in vals:
             vals["discount1"] = vals.pop("discount")
-            vals.update({field: 0 for field in discount_fields[1:]})
+            vals.update(dict.fromkeys(discount_fields[1:], 0))
         return super().write(vals)
