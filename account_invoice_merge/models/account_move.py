@@ -100,7 +100,6 @@ class AccountMove(models.Model):
         list_key.sort()
         return tuple(list_key)
 
-    # flake8: noqa: C901
     def do_merge(
         self, keep_references=True, date_invoice=False, remove_empty_invoice_lines=True
     ):
