@@ -440,10 +440,12 @@ class TestGlobalDiscount(AccountTestInvoicingCommon):
             lambda line: line.tax_line_id and not line.invoice_global_discount_id
         )
         line_without_tax = invoice.line_ids.filtered(
-            lambda line: line.tax_ids.amount == 0
-            and not line.tax_line_id
-            and line.product_id
-            and not line.invoice_global_discount_id
+            lambda line: (
+                line.tax_ids.amount == 0
+                and not line.tax_line_id
+                and line.product_id
+                and not line.invoice_global_discount_id
+            )
         )
         self.assertEqual(len(tax_line), 1)
         self.assertAlmostEqual(
