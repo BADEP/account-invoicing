@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
     <template id="report_billing_document">
-        <t t-call="web.external_layout">
-            <t t-set="address">
-                <address
-                    t-field="o.partner_id"
-                    t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'
-                />
-                <div t-if="o.partner_id.vat" class="mt16"><t
-                    t-out="o.company_id.country_id.vat_label or 'Tax ID'"
-                />: <span t-field="o.partner_id.vat" /></div>
-            </t>
+        <t t-set="address">
+            <address
+                t-field="o.partner_id"
+                t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'
+            />
+            <div t-if="o.partner_id.vat" class="mt16"><t
+                t-out="o.company_id.country_id.vat_label or 'Tax ID'"
+            />: <span t-field="o.partner_id.vat" /></div>
+        </t>
+        <t t-call="web.external_layout" address="address" colspan="6">
             <div class="page">
                 <h2>
                     <span t-if="o.state == 'billed'">Billing</span>
@@ -38,7 +38,6 @@
                 >
                     <thead name="line_header">
                         <tr>
-                            <t t-set="colspan" t-value="6" />
                             <th>
                                 <span>Invoice Number</span>
                             </th>
