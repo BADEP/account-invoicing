@@ -10,7 +10,6 @@ class AccountMove(models.Model):
 
     pricelist_id = fields.Many2one(
         comodel_name="product.pricelist",
-        string="Pricelist",
         compute="_compute_pricelist_id",
         tracking=True,
         store=True,
@@ -192,15 +191,13 @@ class AccountMoveLine(models.Model):
         self.ensure_one()
         self.product_id.ensure_one()
 
-        price = self.pricelist_item_id._compute_price(
+        return self.pricelist_item_id._compute_price(
             product=self.product_id,
             quantity=self.quantity or 1.0,
             uom=self.product_uom_id,
             date=self._get_move_date(),
             currency=self.currency_id,
         )
-
-        return price
 
     def _get_pricelist_price_before_discount(self):
         """Compute the price used as base for the pricelist price computation.
