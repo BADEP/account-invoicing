@@ -54,10 +54,9 @@ class InvoiceMerge(models.TransientModel):
         if self.env.context.get("active_model", "") == "account.move":
             ids = self.env.context["active_ids"]
             if len(ids) < 2:
-                msg = self.env._(
+                return self.env._(
                     "Please select multiple invoices to merge in the list view."
                 )
-                return msg
             invs = self.env["account.move"].browse(ids)
             error_msg = self._get_not_mergeable_invoices_message(invs)
             if error_msg:

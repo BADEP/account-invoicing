@@ -266,7 +266,8 @@ class TestAccountInvoiceMerge(AccountTestInvoicingCommon):
             "order_line.invoice_lines.move_id"
         )
         invoices_2 = invoices_2.filtered(lambda i: i.state == "draft")
-        self.assertEqual(sorted(invoices_2.ids), sorted(list(invoices_info.keys())))
+        self.assertEqual(sorted(invoices_2.ids), sorted(invoices_info.keys()))
+        return None
 
     def _add_qty_delivered_and_create_invoice(self, sale_order):
         for line in sale_order.order_line:
@@ -344,6 +345,7 @@ class TestAccountInvoiceMerge(AccountTestInvoicingCommon):
         for line in sale_order_2.order_line:
             self.assertEqual(line.qty_delivered, 3)
             self.assertEqual(line.qty_invoiced, 3)
+        return None
 
     def test_callback_same_sale_order(self):
         if "sale.order" not in self.env.registry:
@@ -389,6 +391,7 @@ class TestAccountInvoiceMerge(AccountTestInvoicingCommon):
         for line in sale_order.order_line:
             self.assertEqual(line.qty_delivered, 5)
             self.assertEqual(line.qty_invoiced, 4)
+        return None
 
     def test_callback_different_purchase_order(self):
         if "purchase.order" not in self.env.registry:
@@ -455,6 +458,7 @@ class TestAccountInvoiceMerge(AccountTestInvoicingCommon):
         for line in purchase_order_2.order_line:
             self.assertEqual(line.qty_received, 3)
             self.assertEqual(line.qty_invoiced, 3)
+        return None
 
     def test_callback_same_purchase_order(self):
         if "purchase.order" not in self.env.registry:
@@ -501,3 +505,4 @@ class TestAccountInvoiceMerge(AccountTestInvoicingCommon):
         for line in purchase_order.order_line:
             self.assertEqual(line.qty_received, 5)
             self.assertEqual(line.qty_invoiced, 4)
+        return None
