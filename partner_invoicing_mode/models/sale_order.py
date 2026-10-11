@@ -66,9 +66,15 @@ class SaleOrder(models.Model):
         domain = self._get_generate_invoices_domain(
             companies=companies, invoicing_mode=invoicing_mode
         )
+        # Grouping keys are invoice values keys: map them to sale order fields
+        invoice_key_to_field = {"invoice_incoterm_id": "incoterm"}
+        groupby = [
+            invoice_key_to_field.get(key, key)
+            for key in self._get_invoice_grouping_keys()
+        ]
         saleorder_groups = self._read_group(
             domain=domain,
-            groupby=self._get_invoice_grouping_keys(),
+            groupby=groupby,
             aggregates=["id:array_agg"],
         )
         for *_, saleorder_ids in saleorder_groups:

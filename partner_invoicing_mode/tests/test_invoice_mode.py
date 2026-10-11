@@ -16,6 +16,8 @@ from .common import CommonPartnerInvoicingMode
 
 
 class TestInvoiceMode(CommonPartnerInvoicingMode):
+    _test_user_groups = None
+
     def test_invoice_job_related_action(self):
         """Dedicated invoice view is present in queue job's multi invoice action"""
         job_single = self.env["queue.job"].search(
@@ -122,7 +124,18 @@ class TestInvoiceMode(CommonPartnerInvoicingMode):
             self.SaleOrder.cron_generate_standard_invoices()
             with trap_jobs() as trap_validate:
                 trap.perform_enqueued_jobs()
-            self.assertEqual(1, len(trap_validate.enqueued_jobs))
+            # Only consider so1 invoice: demo data may contain other sale
+            # orders to invoice
+            self.assertEqual(
+                1,
+                len(
+                    [
+                        job
+                        for job in trap_validate.enqueued_jobs
+                        if job.recordset == self.so1.invoice_ids
+                    ]
+                ),
+            )
             with freeze_time("2024-03-11"):
                 trap_validate.perform_enqueued_jobs()
         self.assertTrue(self.so1.invoice_ids)
