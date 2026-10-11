@@ -1,12 +1,14 @@
 # Copyright (C) 2019-Today: Odoo Community Association (OCA)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
+import typing
+
 from odoo import api, models
 
 
 class StockPicking(models.Model):
     _name = "stock.picking"
-    _inherit = [
+    _inherit: typing.ClassVar = [
         _name,
         "stock.invoice.state.mixin",
     ]

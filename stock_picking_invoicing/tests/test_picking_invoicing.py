@@ -158,6 +158,7 @@ class TestPickingInvoicing(TestPickingInvoicingCommon):
                 "standard_price": "500",
             }
         )
+        cls.count_2binvoiced_before = cls.pick_type_in.count_picking_2binvoiced
         cls.picking_in = cls.picking_model.create(
             {
                 "partner_id": cls.partner.id,
@@ -228,7 +229,7 @@ class TestPickingInvoicing(TestPickingInvoicingCommon):
             "location_dest_id": self.customers_location.id,
             "location_id": self.stock_location.id,
             "product_uom_qty": 2,
-            "product_uom": self.product_test_1.uom_id.id,
+            "uom_id": self.product_test_1.uom_id.id,
         }
         new_move = self.move_model.create(move_vals)
         picking.set_to_be_invoiced()
@@ -278,7 +279,7 @@ class TestPickingInvoicing(TestPickingInvoicingCommon):
             "location_dest_id": self.customers_location.id,
             "location_id": self.stock_location.id,
             "product_uom_qty": 2,
-            "product_uom": self.product_test_1.uom_id.id,
+            "uom_id": self.product_test_1.uom_id.id,
         }
         self.move_model.create(move_vals)
         self.picking_move_state(picking)
@@ -319,7 +320,7 @@ class TestPickingInvoicing(TestPickingInvoicingCommon):
             "location_dest_id": self.customers_location.id,
             "location_id": self.stock_location.id,
             "product_uom_qty": 2,
-            "product_uom": self.product_test_1.uom_id.id,
+            "uom_id": self.product_test_1.uom_id.id,
         }
         new_move = self.move_model.create(move_vals)
         picking.set_to_be_invoiced()
@@ -371,7 +372,7 @@ class TestPickingInvoicing(TestPickingInvoicingCommon):
             "location_dest_id": self.stock_location.id,
             "location_id": self.suppliers_location.id,
             "product_uom_qty": 2,
-            "product_uom": self.product_test_1.uom_id.id,
+            "uom_id": self.product_test_1.uom_id.id,
         }
         new_move = self.move_model.create(move_vals)
         picking.set_to_be_invoiced()
@@ -418,7 +419,7 @@ class TestPickingInvoicing(TestPickingInvoicingCommon):
             "location_dest_id": self.customers_location.id,
             "location_id": self.stock_location.id,
             "product_uom_qty": 4,
-            "product_uom": self.product_test_1.uom_id.id,
+            "uom_id": self.product_test_1.uom_id.id,
         }
         new_move = self.move_model.create(move_vals)
         picking.set_to_be_invoiced()
@@ -481,7 +482,7 @@ class TestPickingInvoicing(TestPickingInvoicingCommon):
             "location_dest_id": self.customers_location.id,
             "location_id": self.stock_location.id,
             "product_uom_qty": 2,
-            "product_uom": self.product_test_1.uom_id.id,
+            "uom_id": self.product_test_1.uom_id.id,
         }
         self.move_model.create(move_vals)
         picking.set_to_be_invoiced()
@@ -520,7 +521,7 @@ class TestPickingInvoicing(TestPickingInvoicingCommon):
             "location_dest_id": self.customers_location.id,
             "location_id": self.stock_location.id,
             "product_uom_qty": 2,
-            "product_uom": self.product_test_1.uom_id.id,
+            "uom_id": self.product_test_1.uom_id.id,
         }
         self.move_model.create(move_vals)
         picking.set_to_be_invoiced()
@@ -560,7 +561,7 @@ class TestPickingInvoicing(TestPickingInvoicingCommon):
             "location_dest_id": self.customers_location.id,
             "location_id": self.stock_location.id,
             "product_uom_qty": 1,
-            "product_uom": self.product_test_1.uom_id.id,
+            "uom_id": self.product_test_1.uom_id.id,
         }
         self.move_model.create(move_vals)
         move_vals2 = {
@@ -569,7 +570,7 @@ class TestPickingInvoicing(TestPickingInvoicingCommon):
             "location_dest_id": self.customers_location.id,
             "location_id": self.stock_location.id,
             "product_uom_qty": 1,
-            "product_uom": self.product_test_2.uom_id.id,
+            "uom_id": self.product_test_2.uom_id.id,
         }
         self.move_model.create(move_vals2)
         picking.set_to_be_invoiced()
@@ -611,7 +612,7 @@ class TestPickingInvoicing(TestPickingInvoicingCommon):
             "location_dest_id": self.customers_location.id,
             "location_id": self.stock_location.id,
             "product_uom_qty": 1,
-            "product_uom": self.product_test_1.uom_id.id,
+            "uom_id": self.product_test_1.uom_id.id,
         }
         self.move_model.create(move_vals)
         picking2 = picking.copy()
@@ -621,7 +622,7 @@ class TestPickingInvoicing(TestPickingInvoicingCommon):
             "location_dest_id": self.customers_location.id,
             "location_id": self.stock_location.id,
             "product_uom_qty": 1,
-            "product_uom": self.product_test_1.uom_id.id,
+            "uom_id": self.product_test_1.uom_id.id,
         }
         self.move_model.create(move_vals2)
         picking.set_to_be_invoiced()
@@ -678,7 +679,7 @@ class TestPickingInvoicing(TestPickingInvoicingCommon):
             "location_dest_id": self.customers_location.id,
             "location_id": self.stock_location.id,
             "product_uom_qty": 1,
-            "product_uom": self.product_test_1.uom_id.id,
+            "uom_id": self.product_test_1.uom_id.id,
         }
         self.move_model.create(move_vals)
         picking2 = picking.copy({"partner_id": self.partner3.id})
@@ -688,7 +689,7 @@ class TestPickingInvoicing(TestPickingInvoicingCommon):
             "location_dest_id": self.customers_location.id,
             "location_id": self.stock_location.id,
             "product_uom_qty": 1,
-            "product_uom": self.product_test_2.uom_id.id,
+            "uom_id": self.product_test_2.uom_id.id,
         }
         self.move_model.create(move_vals2)
         picking.set_to_be_invoiced()
@@ -727,7 +728,11 @@ class TestPickingInvoicing(TestPickingInvoicingCommon):
         """
         Check method counting 2binvoice used in kanban view
         """
-        self.assertEqual(1, self.pick_type_in.count_picking_2binvoiced)
+        self.pick_type_in.invalidate_recordset(["count_picking_2binvoiced"])
+        self.assertEqual(
+            self.count_2binvoiced_before + 1,
+            self.pick_type_in.count_picking_2binvoiced,
+        )
 
     def test_return_customer_picking(self):
         """
@@ -750,7 +755,7 @@ class TestPickingInvoicing(TestPickingInvoicingCommon):
                 "location_id": self.stock_location.id,
                 "location_dest_id": self.customers_location.id,
                 "product_uom_qty": 1,
-                "product_uom": self.env.ref("uom.product_uom_unit").id,
+                "uom_id": self.env.ref("uom.product_uom_unit").id,
             }
         )
         self.picking_move_state(picking)
@@ -807,7 +812,7 @@ class TestPickingInvoicing(TestPickingInvoicingCommon):
                 "location_id": self.suppliers_location.id,
                 "location_dest_id": self.stock_location.id,
                 "product_uom_qty": 1,
-                "product_uom": self.env.ref("uom.product_uom_unit").id,
+                "uom_id": self.env.ref("uom.product_uom_unit").id,
             }
         )
         self.picking_move_state(picking)
@@ -875,7 +880,7 @@ class TestPickingInvoicing(TestPickingInvoicingCommon):
                 "picking_id": picking.id,
                 "location_id": self.stock_location.id,
                 "location_dest_id": self.customers_location.id,
-                "product_uom": self.product_price_test.uom_id.id,
+                "uom_id": self.product_price_test.uom_id.id,
             }
         )
         self.picking_move_state(picking)
@@ -909,7 +914,7 @@ class TestPickingInvoicing(TestPickingInvoicingCommon):
                 "picking_id": picking.id,
                 "location_id": self.stock_location.id,
                 "location_dest_id": self.customers_location.id,
-                "product_uom": self.product_test_1.uom_id.id,
+                "uom_id": self.product_test_1.uom_id.id,
             }
         )
 

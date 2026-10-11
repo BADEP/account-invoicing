@@ -1,13 +1,15 @@
 # Copyright (C) 2019-Today: Odoo Community Association (OCA)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
+import typing
+
 from odoo import models
 from odoo.tools.float_utils import float_round
 
 
 class StockMove(models.Model):
     _name = "stock.move"
-    _inherit = [
+    _inherit: typing.ClassVar = [
         _name,
         "stock.invoice.state.mixin",
     ]
@@ -33,7 +35,7 @@ class StockMove(models.Model):
         product = self.mapped("product_id")
         product.ensure_one()
         sum(self.mapped("product_uom_qty"))
-        product_uom = self.mapped("product_uom")
+        product_uom = self.mapped("uom_id")
         company = self[0].picking_id.company_id if self else False
         # Only in the cases the stock.move has linked to Sale or
         # Purchase Order it's possible use different Currencys
@@ -48,7 +50,7 @@ class StockMove(models.Model):
                 partner_id=partner, quantity=qty, date=date_done
             )
             if not seller:
-                po_line_uom = self.mapped("product_uom") or product.uom_id
+                po_line_uom = self.mapped("uom_id") or product.uom_id
                 price_unit = self.env["account.tax"]._fix_tax_included_price_company(
                     product.uom_id._compute_price(product.standard_price, po_line_uom),
                     product.supplier_taxes_id,
@@ -68,13 +70,13 @@ class StockMove(models.Model):
                 )
             else:
                 price_unit = self.env["account.tax"]._fix_tax_included_price_company(
-                    seller.price,
+                    seller["price"],
                     product.supplier_taxes_id,
                     # TODO: Should inform taxes_ids in stock.move?
                     product.supplier_taxes_id,
                     self and self[0].company_id,
                 )
-                price_unit = seller.currency_id._convert(
+                price_unit = seller["currency_id"]._convert(
                     price_unit, currency, company, date_done, False
                 )
                 price_unit = float_round(
@@ -84,7 +86,7 @@ class StockMove(models.Model):
                         self.env["decimal.precision"].precision_get("Product Price"),
                     ),
                 )
-                result = seller.product_uom_id._compute_price(price_unit, product_uom)
+                result = seller["uom_id"]._compute_price(price_unit, product_uom)
 
         else:
             # If partner given, search price in its sale pricelist
@@ -111,7 +113,7 @@ class StockMove(models.Model):
                     product,
                     qty,
                     product_uom,
-                    date_done,
+                    date=date_done,
                     currency=currency,
                 )
 
