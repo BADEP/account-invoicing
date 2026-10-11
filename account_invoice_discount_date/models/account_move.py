@@ -26,6 +26,6 @@ class AccountMove(models.Model):
                     ("discount_date", "!=", False),
                 ]
             ).mapped("discount_date")
-            new_discount_date = d_dates and sorted(d_dates)[0] or None
+            new_discount_date = d_dates and min(d_dates) or None
             if new_discount_date != record.discount_date or not new_discount_date:
                 record.discount_date = new_discount_date
