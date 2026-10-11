@@ -27,9 +27,11 @@ class AccountMove(models.Model):
                 and self.env.context.get("force_check_currecy", False)
             )
         ) and self.filtered(
-            lambda a: a.pricelist_id
-            and a.is_sale_document()
-            and a.pricelist_id.currency_id != a.currency_id
+            lambda a: (
+                a.pricelist_id
+                and a.is_sale_document()
+                and a.pricelist_id.currency_id != a.currency_id
+            )
         ):
             raise UserError(
                 self.env._("Pricelist and Invoice need to use the same currency.")
