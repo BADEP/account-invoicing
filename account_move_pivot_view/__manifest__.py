@@ -5,7 +5,7 @@
     "summary": "Adds pivot view to Invoices (move in and move out) and Refunds",
     "author": "Solvos, Odoo Community Association (OCA)",
     "license": "AGPL-3",
-    "version": "19.0.1.0.0",
+    "version": "20.0.1.0.0",
     "category": "Account",
     "website": "https://github.com/OCA/account-invoicing",
     "depends": ["account"],

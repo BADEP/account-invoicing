@@ -10,6 +10,8 @@ from .. import uninstall_hook
 
 @tagged("post_install", "-at_install")
 class TestUninstallHook(BaseCommon):
+    _test_user_groups = None
+
     def test_uninstall_hook(self):
         self.env.ref("account.action_move_in_invoice").unlink()
 
