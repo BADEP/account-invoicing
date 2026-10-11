@@ -63,8 +63,8 @@ class AccountMoveLine(models.Model):
         """Compute the fixed discount based on the discount percentage."""
         if self.env.context.get("ignore_discount_onchange"):
             return
-        self = self.with_context(ignore_discount_onchange=True)
-        self.discount = self._get_discount_from_fixed_discount()
+        line = self.with_context(ignore_discount_onchange=True)
+        line.discount = line._get_discount_from_fixed_discount()
 
     @api.onchange("discount")
     def _onchange_discount(self):
@@ -73,8 +73,8 @@ class AccountMoveLine(models.Model):
         """
         if self.env.context.get("ignore_discount_onchange"):
             return
-        self = self.with_context(ignore_discount_onchange=True)
-        self.discount_fixed = 0.0
+        line = self.with_context(ignore_discount_onchange=True)
+        line.discount_fixed = 0.0
 
     def _get_discount_from_fixed_discount(self):
         """Calculate the discount percentage from the fixed discount amount."""
