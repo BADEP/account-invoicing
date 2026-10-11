@@ -1,12 +1,14 @@
 # Copyright 2021 Ecosoft Co., Ltd. (http://ecosoft.co.th)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
+from typing import ClassVar
+
 from odoo import models
 
 
 class AccountPayment(models.Model):
     _name = "account.payment"
-    _inherit = ["account.payment", "base.cancel.confirm"]
+    _inherit: ClassVar[list[str]] = ["account.payment", "base.cancel.confirm"]
 
     _has_cancel_reason = "optional"  # ["no", "optional", "required"]
 
