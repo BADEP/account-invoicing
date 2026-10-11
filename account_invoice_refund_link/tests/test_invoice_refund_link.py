@@ -109,6 +109,8 @@ class TestInvoiceRefundLinkBase(BaseCommon):
 
 
 class TestInvoiceRefundLink(TestInvoiceRefundLinkBase):
+    _test_user_groups = None
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -141,6 +143,8 @@ class TestInvoiceRefundLink(TestInvoiceRefundLinkBase):
 
 
 class TestInvoiceRefundNoModifyLink(TestInvoiceRefundLinkBase):
+    _test_user_groups = None
+
     is_modify = False
 
     def test_refund_link(self):
@@ -148,6 +152,8 @@ class TestInvoiceRefundNoModifyLink(TestInvoiceRefundLinkBase):
 
 
 class TestInvoiceRefundModifyLink(TestInvoiceRefundLinkBase):
+    _test_user_groups = None
+
     is_modify = True
 
     def test_refund_link(self):
