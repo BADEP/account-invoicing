@@ -133,10 +133,12 @@ class AccountInvoiceClearingWizard(models.TransientModel):
             record.company_currency_id = company.currency_id
             account_type = self._get_account_type_from_move_type(record.move_type)
             record.move_line_ids = self.invoice_ids.mapped("line_ids").filtered(
-                lambda ml, acc_type=account_type: not ml.full_reconcile_id
-                and ml.balance
-                and ml.account_id.reconcile
-                and ml.account_id.account_type == acc_type
+                lambda ml, acc_type=account_type: (
+                    not ml.full_reconcile_id
+                    and ml.balance
+                    and ml.account_id.reconcile
+                    and ml.account_id.account_type == acc_type
+                )
             )
 
     @api.depends("move_line_ids", "line_ids")
