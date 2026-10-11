@@ -1,7 +1,6 @@
 # Copyright 2024 Tecnativa - Pilar Vargas
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from odoo import api, fields, models
-from odoo.tools import float_compare
 
 
 class SaleOrder(models.Model):
@@ -30,10 +29,8 @@ class SaleOrder(models.Model):
             uncomplete_lines = order.order_line.filtered(
                 lambda line: (
                     line.product_id.invoice_policy == "delivery"
-                    and float_compare(
-                        line.product_uom_qty,
-                        line.qty_delivered,
-                        precision_rounding=line.product_uom_id.rounding,
+                    and line.product_uom_id.compare(
+                        line.product_uom_qty, line.qty_delivered
                     )
                     > 0
                 )
