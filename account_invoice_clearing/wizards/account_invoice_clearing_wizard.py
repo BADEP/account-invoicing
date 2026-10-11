@@ -3,7 +3,7 @@
 
 import json
 from collections import OrderedDict
-from datetime import datetime
+from datetime import date
 
 from odoo import api, exceptions, fields, models
 from odoo.tools import float_is_zero, groupby
@@ -80,7 +80,6 @@ class AccountInvoiceClearingWizard(models.TransientModel):
     journal_id = fields.Many2one(
         comodel_name="account.journal",
         domain="[('type', '=', 'general'), ('company_id', '=', company_id)]",
-        string="Journal",
         check_company=True,
         required=True,
         default=lambda self: self._get_default_journal(),
@@ -287,7 +286,7 @@ class AccountInvoiceClearingWizard(models.TransientModel):
         # Sort lines by _order and get first and last line to know the current order
         sorted_lines = self.line_ids.sorted()  # sort by _order
         first_line, last_line = sorted_lines[:1], sorted_lines[-1:]
-        max_date = datetime.max.date()
+        max_date = date.max
         # Sort by date maturity (current order of self.line_ids is not important)
         sorted_lines = self.line_ids.sorted(
             key=lambda line: line.date_maturity or max_date,
@@ -543,14 +542,12 @@ class AccountInvoiceClearingLinesWizard(models.TransientModel):
 
     clearing_id = fields.Many2one(
         comodel_name="account.invoice.clearing.wizard",
-        string="Clearing",
     )
     sequence = fields.Integer(
         default=10,
     )
     move_line_id = fields.Many2one(
         comodel_name="account.move.line",
-        string="Move Line",
         required=True,
     )
     invoice_id = fields.Many2one(
@@ -588,7 +585,7 @@ class AccountInvoiceClearingLinesWizard(models.TransientModel):
         related="move_line_id.account_id",
         readonly=True,
     )
-    name = fields.Char(
+    name = fields.Text(
         related="move_line_id.name",
         readonly=True,
     )
