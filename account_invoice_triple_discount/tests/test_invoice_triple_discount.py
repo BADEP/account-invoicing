@@ -8,6 +8,8 @@ from odoo.addons.base.tests.common import BaseCommon
 
 
 class TestInvoiceTripleDiscount(BaseCommon):
+    _test_user_groups = None
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -53,8 +55,7 @@ class TestInvoiceTripleDiscount(BaseCommon):
             line_form.tax_ids.clear()
             line_form.tax_ids.add(self.tax)
 
-        invoice = invoice_form.save()
-        return invoice
+        return invoice_form.save()
 
     def test_01_discounts(self):
         """Tests multiple discounts in line with taxes"""
