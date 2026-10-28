@@ -6,7 +6,7 @@ from odoo import api, models
 
 class StockPicking(models.Model):
     _name = "stock.picking"
-    _inherit = [
+    _inherit = [  # noqa: RUF012
         _name,
         "stock.invoice.state.mixin",
     ]

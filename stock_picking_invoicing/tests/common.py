@@ -43,20 +43,12 @@ class TestPickingInvoicingCommon(TransactionCase):
         return invoice
 
     def return_picking_wizard(self, picking):
-        # Return Picking
-        return_wizard_form = Form(
-            self.env["stock.return.picking"].with_context(
-                **dict(active_id=picking.id, active_model="stock.picking")
-            )
-        )
-        return_wizard_form.invoice_state = "2binvoiced"
-        self.return_wizard = return_wizard_form.save()
-        self.return_wizard.product_return_moves[0].quantity = 1
-        result_wizard = self.return_wizard.action_create_returns()
-        self.assertTrue(result_wizard, "Create returns wizard fail.")
-        picking_devolution = self.env["stock.picking"].browse(
-            result_wizard.get("res_id")
-        )
+        # Return Picking: the stock.return.picking wizard was removed in
+        # Odoo 20, returns are now draft pickings created by _create_return()
+        picking_devolution = picking._create_return()
+        self.assertTrue(picking_devolution, "Create returns fail.")
+        picking_devolution.move_ids[0].product_uom_qty = 1
+        picking_devolution.set_to_be_invoiced()
         return picking_devolution
 
     def create_backorder_wizard(self, picking):
