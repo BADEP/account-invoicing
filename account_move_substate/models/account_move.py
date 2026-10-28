@@ -14,6 +14,6 @@ class BaseSubstateType(models.Model):
 
 
 class AccountMove(models.Model):
-    _inherit = ["account.move", "base.substate.mixin"]
+    _inherit = ["account.move", "base.substate.mixin"]  # noqa: RUF012
     _name = "account.move"
     _state_field = "state"
