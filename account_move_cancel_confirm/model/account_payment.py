@@ -6,7 +6,7 @@ from odoo import models
 
 class AccountPayment(models.Model):
     _name = "account.payment"
-    _inherit = ["account.payment", "base.cancel.confirm"]
+    _inherit = ["account.payment", "base.cancel.confirm"]  # noqa: RUF012
 
     _has_cancel_reason = "optional"  # ["no", "optional", "required"]
 

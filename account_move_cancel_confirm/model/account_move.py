@@ -7,7 +7,7 @@ from odoo.tools import config
 
 class AccountMove(models.Model):
     _name = "account.move"
-    _inherit = ["account.move", "base.cancel.confirm"]
+    _inherit = ["account.move", "base.cancel.confirm"]  # noqa: RUF012
 
     _has_cancel_reason = "optional"  # ["no", "optional", "required"]
 
