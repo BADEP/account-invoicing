@@ -2,7 +2,6 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html)
 
 from datetime import date
-from typing import ClassVar
 
 from odoo import api, fields, models
 from odoo.exceptions import UserError, ValidationError
@@ -11,7 +10,7 @@ from odoo.exceptions import UserError, ValidationError
 class AccountBilling(models.Model):
     _name = "account.billing"
     _description = "Account Billing"
-    _inherit: ClassVar[list[str]] = ["mail.thread"]
+    _inherit = ["mail.thread"]  # noqa: RUF012
     _order = "date desc, id desc"
 
     name = fields.Char(
