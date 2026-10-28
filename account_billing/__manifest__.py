@@ -4,7 +4,7 @@
 {
     "name": "Billing Process",
     "summary": "Group invoice as billing before payment",
-    "version": "19.0.1.0.1",
+    "version": "20.0.1.0.0",
     "author": "Ecosoft, Odoo Community Association (OCA)",
     "license": "AGPL-3",
     "website": "https://github.com/OCA/account-invoicing",
@@ -13,12 +13,11 @@
     "data": [
         "data/account_billing_sequence.xml",
         "data/server_action.xml",
-        "security/ir.model.access.csv",
-        "security/account_billing_security.xml",
         "views/account_billing_views.xml",
         "views/account_move_views.xml",
         "report/report_billing.xml",
         "report/report.xml",
+        "security/ir.access.csv",
     ],
     "installable": True,
     "maintainers": ["Saran440", "AungKoKoLin1997"],

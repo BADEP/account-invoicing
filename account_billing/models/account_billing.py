@@ -10,7 +10,7 @@ from odoo.exceptions import UserError, ValidationError
 class AccountBilling(models.Model):
     _name = "account.billing"
     _description = "Account Billing"
-    _inherit = ["mail.thread"]
+    _inherit = ["mail.thread"]  # noqa: RUF012
     _order = "date desc, id desc"
 
     name = fields.Char(
@@ -26,7 +26,6 @@ class AccountBilling(models.Model):
     )
     company_id = fields.Many2one(
         comodel_name="res.company",
-        string="Company",
         default=lambda self: self.env.company,
         index=True,
         required=True,
@@ -76,7 +75,6 @@ class AccountBilling(models.Model):
     )
     currency_id = fields.Many2one(
         comodel_name="res.currency",
-        string="Currency",
         required=True,
         default=lambda self: self.env.company.currency_id,
         readonly=True,
@@ -270,7 +268,7 @@ class AccountBilling(models.Model):
         }
 
     def _get_billing_line_dict(self, moves):
-        billing_line_dict = [
+        return [
             {
                 "billing_id": self.id,
                 "move_id": m.id,
@@ -279,7 +277,6 @@ class AccountBilling(models.Model):
             }
             for m in moves
         ]
-        return billing_line_dict
 
     def compute_lines(self):
         self.ensure_one()
