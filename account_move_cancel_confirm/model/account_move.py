@@ -1,15 +1,13 @@
 # Copyright 2020 Ecosoft Co., Ltd. (http://ecosoft.co.th)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from typing import ClassVar
-
 from odoo import models
 from odoo.tools import config
 
 
 class AccountMove(models.Model):
     _name = "account.move"
-    _inherit: ClassVar[list[str]] = ["account.move", "base.cancel.confirm"]
+    _inherit = ["account.move", "base.cancel.confirm"]  # noqa: RUF012
 
     _has_cancel_reason = "optional"  # ["no", "optional", "required"]
 
